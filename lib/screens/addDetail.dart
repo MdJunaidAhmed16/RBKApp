@@ -1,20 +1,22 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_local_variable, unused_field
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_local_variable, unused_field, prefer_final_fields
 
 import 'dart:io';
+import 'dart:typed_data';
 
-import 'package:first_ui/Disease/camera.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first_ui/components/navigationbar.dart';
-import 'package:first_ui/constants/colors.dart';
-import 'package:first_ui/constants/constants.dart';
 import 'package:first_ui/screens/home/reminder.dart';
-import 'package:flutter/rendering.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:first_ui/services/firestore_methods.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:first_ui/components/input.dart';
-import 'package:first_ui/constants/theme.dart';
 import 'package:first_ui/components/button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path/path.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
@@ -24,6 +26,95 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
+  Uint8List? _file;
+  bool _isLoading = false;
+  _selectImage(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: Text("Create a post"),
+            children: [
+              SimpleDialogOption(
+                padding: EdgeInsets.all(20),
+                child: Text("Take a photo"),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  Uint8List file = await pickImage(ImageSource.camera);
+                  setState(() {
+                    _file = file;
+                  });
+                },
+              ),
+              SimpleDialogOption(
+                padding: EdgeInsets.all(20),
+                child: Text("Pick a photo from gallery"),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  Uint8List file = await pickImage(ImageSource.gallery);
+                  setState(() {
+                    _file = file;
+                  });
+                },
+              ),
+              SimpleDialogOption(
+                padding: EdgeInsets.all(20),
+                child: Text("Cancel"),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void postData(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      String res = await FireStoreMethods().uploadPost(
+        _cropController.text,
+        _varietyController.text,
+        _irrigationController.text,
+        _stageController.text,
+        _pestController.text,
+        _file!,
+      );
+      if (res == "Suceess") {
+        setState(() {
+          _isLoading = false;
+        });
+        clearImage();
+      } else {
+        Get.snackbar("Data", "Your Data Has been Submitted SuccesFully");
+      }
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
+
+  void clearImage() {
+    setState(() {
+      _file = null;
+    });
+  }
+
+  String? imageUrl;
+  CollectionReference reports =
+      FirebaseFirestore.instance.collection('reports');
+  File? _image;
+  Future getImage() async {
+    ImagePicker picker = ImagePicker();
+    var image = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image as File;
+      print('Image Path $_image');
+    });
+  }
+
   final TextEditingController _cropController = TextEditingController();
   final TextEditingController _varietyController = TextEditingController();
   final TextEditingController _stageController = TextEditingController();
@@ -35,6 +126,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   String _endTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   int _selectedRemind = 5;
   late File imageFile;
+  bool _isloading = false;
   String _selectedRepeat = "None";
   List<String> cropList = ["Rice", "Maize", "Banana", "SugarCane"];
   int _selectedColor = 0;
@@ -96,64 +188,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 title: "Pests",
                 controller: _pestController,
               ),
-
-              // MyInputField(
-              //   hint: "Enter any Pest attack",
-              //   title: "Pest",
-              //   widget: DropdownButton(
-              //     icon: Icon(
-              //       Icons.keyboard_arrow_down,
-              //     ),
-              //     iconSize: 32,
-              //     elevation: 4,
-              //     style: subtitleStyle,
-              //     underline: Container(height: 0),
-              //     onChanged: (String? newValue) {
-              //       setState(() {
-              //         _selectedRepeat = newValue!;
-              //       });
-              //     },
-              //     items: cropList.map<DropdownMenuItem<String>>((String? value) {
-              //       return DropdownMenuItem<String>(
-              //         value: value.toString(),
-              //         child: Text(value!),
-              //       );
-              //     }).toList(),
-              //   ),
-              // ),
-              // TextButton(
-              //     onPressed: () => setState(() {
-              //           print(pressed);
-              //           pressed = 1;
-              //         }),
-              //     child: Text("Add Another Fertilizerr")),
-              // pressed == 1
-              //     ? MyInputField(
-              //         hint: "$_selectedRepeat",
-              //         title: "Repeat",
-              //         widget: DropdownButton(
-              //           icon: Icon(
-              //             Icons.keyboard_arrow_down,
-              //           ),
-              //           iconSize: 32,
-              //           elevation: 4,
-              //           style: subtitleStyle,
-              //           underline: Container(height: 0),
-              //           onChanged: (String? newValue) {
-              //             setState(() {
-              //               _selectedRepeat = newValue!;
-              //             });
-              //           },
-              //           items: repeatList
-              //               .map<DropdownMenuItem<String>>((String? value) {
-              //             return DropdownMenuItem<String>(
-              //               value: value.toString(),
-              //               child: Text(value!),
-              //             );
-              //           }).toList(),
-              //         ),
-              //       )
-              //     : Container(),
               SizedBox(height: 18),
               GestureDetector(
                 child: ReminderBanner(
@@ -162,14 +196,27 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   tscolor: Colors.white,
                   color: Color(0xFF4A3298),
                 ),
-                onTap: () => Get.to(() => CameraPage()),
+                onTap: () async {
+                  Uint8List file = await pickImage(ImageSource.camera);
+                  setState(() {
+                    _file = file;
+                  });
+                },
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  MyButton(label: "Submit", onTap: () => _validateDate())
+                  MyButton(
+                      label: "Submit",
+                      onTap: () {
+                        postData(context);
+                        _cropController.clear();
+                        _varietyController.clear();
+                        _stageController.clear();
+                        _irrigationController.clear();
+                        _pestController.clear();
+                      })
                 ],
               ),
             ],
@@ -179,28 +226,28 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
-  _validateDate() {
-    if (_cropController.text.isNotEmpty && _cropController.text.isNotEmpty) {
-      // _addTaskToDb();
-      Get.back();
-    } else if (_cropController.text.isEmpty ||
-        _varietyController.text.isEmpty) {
-      Get.snackbar(
-        "Required",
-        "All fields are required!!",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        icon: Icon(Icons.warning_amber_rounded),
-      );
-    }
-  }
-
   _getFromGallery() async {
     final PickedFile? pickedFile =
         await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
       imageFile = pickedFile as File;
     });
+  }
+
+  pickImage(ImageSource source) async {
+    final ImagePicker _imagePicker = ImagePicker();
+
+    XFile? _file = await _imagePicker.pickImage(source: source);
+
+    if (_file != null) {
+      return await _file.readAsBytes();
+    }
+    print("No Image Selected");
+  }
+
+  showSnackBar(String content, BuildContext context) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(content)));
   }
 
   _appBar(BuildContext context) {
@@ -226,43 +273,5 @@ class _AddTaskPageState extends State<AddTaskPage> {
         )
       ],
     );
-  }
-
-  _getDateFromUser() async {
-    DateTime? _pickerDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2021),
-        lastDate: DateTime(2220));
-    if (_pickerDate != null) {
-      setState(() {
-        _selectedDate = _pickerDate;
-      });
-    } else {
-      print("Its null");
-    }
-  }
-
-  _getTimeFromUser({required bool isStartTime}) async {
-    var pickedTime = await _showTimePicker();
-    String _formatedTime = pickedTime.format(context);
-    if (isStartTime == true) {
-      setState(() {
-        _startTime = _formatedTime;
-      });
-    } else if (isStartTime == false) {
-      setState(() {
-        _endTime = _formatedTime;
-      });
-    }
-  }
-
-  _showTimePicker() {
-    return showTimePicker(
-        initialEntryMode: TimePickerEntryMode.input,
-        context: context,
-        initialTime: TimeOfDay(
-            hour: int.parse(_startTime.split(":")[0]),
-            minute: int.parse(_startTime.split(":")[1].split(" ")[0])));
   }
 }

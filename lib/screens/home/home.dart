@@ -1,13 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:first_ui/Disease/camera.dart';
+import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:first_ui/constants/constants.dart';
+import 'package:first_ui/news/lib/newspage.dart';
 import 'package:first_ui/screens/home/categories.dart';
 import 'package:first_ui/screens/home/homeheader.dart';
+import 'package:first_ui/screens/home/profile.dart';
+import 'package:first_ui/screens/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../components/navigationbar.dart';
+import '../../constants/colors.dart';
 import 'reminder.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,9 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SafeArea(
       child: Scaffold(
+        extendBody: true,
         bottomNavigationBar: Navigationbar(),
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: getProportionateScreenHeight(20)),
               HomeHeader(),
@@ -49,18 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainText: "There are no Reminders for today",
               ),
               Categories(),
-              //SpecialOffers(),
-              SizedBox(height: getProportionateScreenWidth(30)),
-              //PopularProducts(),
-              SizedBox(height: getProportionateScreenWidth(30)),
-              GestureDetector(
-                child: ReminderBanner(
-                    color: Color(0xFFFFA53E),
-                    tscolor: Colors.black,
-                    upText: "Plant Disease Detection",
-                    mainText: "Upload Your Image"),
-                onTap: () => Get.to(() => CameraPage()),
-              ),
+              Weather(),
             ],
           ),
         ),

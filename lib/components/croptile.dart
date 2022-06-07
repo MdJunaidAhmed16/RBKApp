@@ -49,7 +49,7 @@ class CropTile extends StatelessWidget {
                       Image.asset(
                         assetPath,
                         height: 70,
-                        width: 70,
+                        width: 80,
                       ),
                       Text(
                         title,

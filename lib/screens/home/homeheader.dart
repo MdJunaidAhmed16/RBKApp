@@ -23,17 +23,6 @@ class HomeHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SearchField(),
-          IconBtnWithCounter(
-            path: "assets/Cart.svg",
-            press: () {},
-            tpe: true,
-          ),
-          IconBtnWithCounter(
-            tpe: true,
-            path: "assets/Bell.svg",
-            numOfitem: 3,
-            press: () {},
-          ),
         ],
       ),
     );

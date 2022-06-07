@@ -5,6 +5,7 @@ import 'package:first_ui/components/croptile.dart';
 import 'package:first_ui/components/navigationbar.dart';
 import 'package:first_ui/constants/cropslist.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class GridScreen extends StatefulWidget {
   const GridScreen({Key? key}) : super(key: key);
@@ -17,16 +18,20 @@ class _GridScreenState extends State<GridScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        title: Text(
+          "Select a crop",
+          style: TextStyle(color: Colors.black),
+        ),
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {},
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => Get.back(),
           color: Colors.grey,
           tooltip: 'Menu',
         ),
-        actions: _buildActions(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -52,14 +57,5 @@ class _GridScreenState extends State<GridScreen> {
           color: Colors.grey,
           tooltip: 'Search',
         ),
-        IconButton(
-          icon: Icon(
-            Icons.shopping_bag,
-            size: 20,
-          ),
-          onPressed: () {},
-          color: Colors.grey,
-          tooltip: 'Cart',
-        )
       ];
 }

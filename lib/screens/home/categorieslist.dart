@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:first_ui/Disease/detection.dart';
 
 import 'package:first_ui/components/croptile.dart';
 import 'package:first_ui/constants/colors.dart';
 import 'package:first_ui/screens/grid.dart';
-import 'package:first_ui/screens/home/categories.dart';
+import 'package:first_ui/screens/home/task.dart';
+
 import 'package:first_ui/screens/mspval.dart';
-import 'package:flutter/material.dart';
 
 class CategoriesList {
   List cat = [
@@ -29,17 +30,9 @@ class CategoriesList {
         height: 109,
         width: 100,
         color: kSecondaryColor.withOpacity(0.1),
-        title: "Fertilizer",
-        assetPath: "assets/ferti.png",
-        destination: "",
-        price: ""),
-    CropTile(
-        height: 109,
-        width: 100,
-        color: kSecondaryColor.withOpacity(0.1),
-        title: "Village",
-        assetPath: "assets/villa.png",
-        destination: "",
+        title: "Disease",
+        assetPath: "assets/mag.jpg",
+        destination: DetectionApp(),
         price: ""),
     CropTile(
         height: 109,
@@ -47,7 +40,7 @@ class CategoriesList {
         color: kSecondaryColor.withOpacity(0.1),
         title: "To-Do",
         assetPath: "assets/tasker.png",
-        destination: "",
+        destination: ToDo(),
         price: ""),
   ];
 }

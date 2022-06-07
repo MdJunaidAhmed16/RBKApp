@@ -18,7 +18,7 @@ class Categories extends StatelessWidget {
       {"icon": "assets/mspv.jpg", "text": "MSP Values"},
       {"icon": "assets/plant.png", "text": "Seasonal Report"},
       {"icon": "assets/ferti.png", "text": "Fertilizers"},
-      {"icon": "assets/villa.png", "text": "Village Profile"},
+      {"icon": "assets/mag.jpg", "text": "Plant Disease"},
       {"icon": "assets/tasker.png", "text": "Todo"},
     ];
     return Padding(
