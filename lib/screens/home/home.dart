@@ -1,12 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:first_ui/constants/constants.dart';
 import 'package:first_ui/news/lib/newspage.dart';
 import 'package:first_ui/screens/home/categories.dart';
 import 'package:first_ui/screens/home/homeheader.dart';
 import 'package:first_ui/screens/home/profile.dart';
-import 'package:first_ui/screens/weather.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -38,25 +39,26 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return SafeArea(
-      child: Scaffold(
-        extendBody: true,
-        bottomNavigationBar: Navigationbar(),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: getProportionateScreenHeight(20)),
-              HomeHeader(),
-              SizedBox(height: getProportionateScreenWidth(10)),
-              ReminderBanner(
-                tscolor: Colors.white,
-                color: Color(0xFF4A3298),
-                upText: "Reminders",
-                mainText: "There are no Reminders for today",
-              ),
-              Categories(),
-              Weather(),
-            ],
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          extendBody: true,
+          bottomNavigationBar: Navigationbar(),
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: getProportionateScreenHeight(20)),
+                HomeHeader(),
+                SizedBox(height: getProportionateScreenWidth(10)),
+                ReminderBanner(
+                    tscolor: Colors.white,
+                    color: Color(0xFF4A3298),
+                    upText: "Reminders",
+                    mainText: "no reminders for today"),
+                Categories(),
+              ],
+            ),
           ),
         ),
       ),

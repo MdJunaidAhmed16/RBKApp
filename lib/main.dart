@@ -4,6 +4,7 @@ import 'package:first_ui/Disease/src/home_page/models/disease_model.dart';
 
 import 'package:first_ui/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:first_ui/screens/newlogin.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

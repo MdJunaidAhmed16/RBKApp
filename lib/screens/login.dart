@@ -1,9 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:first_ui/components/textfield.dart';
 import 'package:first_ui/constants/constants.dart';
 import 'package:first_ui/screens/home/home.dart';
+import 'package:first_ui/weather/screens/loading_screen.dart';
+
+import 'package:first_ui/weather/weathermain.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 
@@ -187,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (authCred.user != null) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            context, MaterialPageRoute(builder: (context) => LoadingScreen()));
       }
     } on FirebaseAuthException catch (e) {
       print(e.message);
