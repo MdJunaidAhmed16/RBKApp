@@ -1,16 +1,7 @@
-# first_ui
+# RBK Assist App
 
-A new Flutter project.
+### An android app which helps to solve the reduntant tasks in the Agricultural Department of Andhra Pradesh
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Lets the RBK incharge to note down the quantities of crop being sown, in each village, what is the water capacity received to that village.
+- Upload the photo of the farm.
+- And this data is directly update to the Mandal Agriculture Officer
